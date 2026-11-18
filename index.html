@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="zh-HK" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>福岡全男班 6日5夜終極行程 (2026.11.20 - 11.25)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                    },
+                    colors: {
+                        darkbg: '#0B0F19',
+                        cardbg: '#131A2A',
+                        cardborder: '#1E293B',
+                        accent: '#F59E0B', // Amber/Gold for macho energetic vibe
+                        accenthover: '#D97706',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar hiding for horizontal day tabs */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        body {
+            background-color: #0B0F19;
+            color: #F8FAFC;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Smooth transitions */
+        .card-transition {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black pb-20">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none transition-opacity duration-300 opacity-0">
+        <div id="toast-msg" class="bg-amber-500 text-slate-950 font-bold px-5 py-2.5 rounded-full shadow-2xl text-sm flex items-center gap-2 whitespace-nowrap">
+            <span>✅ 已儲存變更</span>
+        </div>
+    </div>
+
+    <!-- Custom Confirm Modal (No native alert/confirm) -->
+    <div id="confirm-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-sm w-full p-6 shadow-2xl">
+            <h3 id="modal-title" class="text-lg font-bold text-white mb-2">確認操作</h3>
+            <p id="modal-desc" class="text-slate-300 text-sm mb-6 leading-relaxed">確定要執行此操作嗎？</p>
+            <div class="flex justify-end gap-3">
+                <button id="modal-cancel" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition">取消</button>
+                <button id="modal-confirm" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-bold transition">確定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-b from-slate-900 to-[#0B0F19] border-b border-slate-800/80 pt-5 pb-4 px-4 sm:px-6">
+        <div class="max-w-3xl mx-auto">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-extrabold bg-amber-500/15 text-amber-400 border border-amber-500/30 tracking-wider uppercase">
+                    🔥 ALL-MALE SQUAD TRIP
+                </span>
+                <span class="text-xs text-slate-400 font-medium">6日5夜 • 全Walk-in • 鐵路巴士制霸</span>
+            </div>
+            
+            <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-2">
+                福岡全男班 6日5夜終極行程 <span class="text-amber-400 block sm:inline text-lg sm:text-2xl font-extrabold">(2026.11.20 - 11.25)</span>
+            </h1>
+            
+            <!-- Hotel Info Pill -->
+            <div class="flex items-center gap-2 text-xs sm:text-sm text-slate-300 bg-slate-800/60 border border-slate-700/70 rounded-xl px-3.5 py-2.5 mb-4">
+                <span class="text-base">🏨</span>
+                <div class="flex-1 min-w-0">
+                    <span class="text-slate-400 mr-1">大本營酒店:</span>
+                    <strong class="text-white font-bold">BASE LAYER HOTEL FUKUOKA</strong>
+                    <span class="text-amber-400/90 ml-1">(清川/渡邊通)</span>
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=BASE+LAYER+HOTEL+FUKUOKA" target="_blank" rel="noopener noreferrer" class="shrink-0 text-xs bg-slate-700 hover:bg-slate-600 text-white px-2.5 py-1 rounded-lg font-semibold transition">
+                    地圖 ↗
+                </a>
+            </div>
+
+            <!-- Action Toolbar -->
+            <div class="grid grid-cols-3 gap-2">
+                <button id="btn-edit-mode" onclick="toggleEditMode()" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs sm:text-sm font-bold transition shadow-sm">
+                    <span id="edit-icon">✏️</span>
+                    <span id="edit-text">編輯模式</span>
+                </button>
+                <button onclick="exportHTML()" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs sm:text-sm font-extrabold transition shadow-md shadow-amber-500/10">
+                    <span>📤</span>
+                    <span>匯出離線網頁</span>
+                </button>
+                <button onclick="confirmReset()" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-slate-800/80 hover:bg-red-950/60 border border-slate-700/80 hover:border-red-800/60 text-slate-400 hover:text-red-300 text-xs sm:text-sm font-semibold transition">
+                    <span>🔄</span>
+                    <span>重設為預設行程</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sticky Day Selector Tabs -->
+    <nav class="sticky top-0 z-30 bg-[#0B0F19]/95 backdrop-blur-md border-b border-slate-800 shadow-lg">
+        <div class="max-w-3xl mx-auto px-3 sm:px-6">
+            <div id="day-tabs" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-3">
+                <!-- Tabs injected by JS -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 pt-5">
+        <!-- Edit Mode Banner -->
+        <div id="edit-banner" class="hidden mb-5 bg-amber-500/10 border border-amber-500/40 rounded-2xl p-3.5 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 text-xs sm:text-sm text-amber-300">
+                <span class="text-lg">🛠️</span>
+                <span><strong>編輯模式已開啟：</strong>可直接修改文字、上下調動次序或新增行程，系統會自動儲存。改完撳「匯出離線網頁」即可Send畀團友！</span>
+            </div>
+        </div>
+
+        <!-- Day Header Info -->
+        <div id="day-header" class="mb-5">
+            <!-- Injected by JS -->
+        </div>
+
+        <!-- Timeline Container -->
+        <div id="timeline-container" class="space-y-4">
+            <!-- Cards injected by JS -->
+        </div>
+
+        <!-- Add Stop Button (Visible in Edit Mode on Day 1-6) -->
+        <div id="add-stop-wrapper" class="hidden mt-6">
+            <button onclick="addNewStop()" class="w-full py-3.5 rounded-2xl border-2 border-dashed border-amber-500/50 hover:border-amber-400 bg-amber-500/5 hover:bg-amber-500/10 text-amber-400 font-bold text-sm flex items-center justify-center gap-2 transition">
+                <span class="text-lg">+</span> 新增行程站點
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-3xl mx-auto px-4 pt-10 pb-6 text-center text-xs text-slate-500">
+        <p>福岡全男班行程助手 • 支援手機離線瀏覽及即時修改匯出</p>
+    </footer>
+
+    <!-- Application Data & Logic -->
+    <script>
+        // Default Itinerary Data (Pre-populated with finalized 6-day Fukuoka itinerary)
+        const DEFAULT_ITINERARY = [
+            {
+                id: "overview",
+                tabLabel: "總覽與交通貼士",
+                tabSub: "住宿・拍卡・尾班車",
+                fullTitle: "總覽與交通貼士：BASE LAYER HOTEL ＆ 福岡全男班攻略",
+                summary: "大本營位於清川/渡邊通（步行4分鐘至地鐵七隈線「渡邊通站」），去博多、天神、藥院、中洲均為一程車或步行距離。",
+                isTipsTab: true,
+                tipsSections: [
+                    {
+                        icon: "🏨",
+                        title: "住宿大本營資訊",
+                        points: [
+                            "酒店名稱：BASE LAYER HOTEL FUKUOKA（〒810-0005 福岡県福岡市中央区清川1-14-15）。",
+                            "最近車站：地鐵七隈線「渡邊通站」2號出口步行約 4 分鐘；西鐵「藥院站」步行約 8 分鐘；斜對面即係柳橋連合市場。"
+                        ]
+                    },
+                    {
+                        icon: "💳",
+                        title: "交通卡與搭車規則 (零買飛煩惱)",
+                        points: [
+                            "iPhone 用戶直接喺「銀包 (Wallet)」加入 Suica / ICOCA / PASMO，用 Apple Pay 增值即可全程嘟卡搭地鐵、西鐵、JR 同西鐵巴士。",
+                            "福岡地鐵 (空港線、七隈線、箱崎線) 亦支援直接用 Visa / Mastercard 感應式信用卡拍卡入閘。",
+                            "【西鐵巴士搭法】一律「後門上車」拍卡（或抽整理券），到站時「前門落車」再拍卡畀錢。"
+                        ]
+                    },
+                    {
+                        icon: "🌙",
+                        title: "深夜尾班車 & 全 Walk-in 策略",
+                        points: [
+                            "【尾班車提醒】地鐵七隈線（天神南站 ➔ 渡邊通站，或博多站 ➔ 渡邊通站）尾班車大約為 00:05 - 00:15，務必 23:55 前到達車站；若錯過尾班車，由天神/大名/中洲沿渡邊通或那珂川慢步返酒店亦只需 12 - 15 分鐘。",
+                            "【全 Walk-in 秘訣】熱門店（如 Day 1 肉いち燒肉、Day 5 八ちゃん拉麵）建議避開 19:30 最爆場時段，提早 18:00 前去門口平板電腦撳飛攞籌。"
+                        ]
+                    },
+                    {
+                        icon: "🍻",
+                        title: "中洲夜生活潛規則 & 退稅貼士",
+                        points: [
+                            "中洲紅燈區街頭切勿跟隨「無料案內所」街邊拉客仔入陌生店舖；去 Girls Bar 揀樓下有寫明「1 set 3,000 - 4,000円 飲み放題」明碼實價嘅店就最安全。",
+                            "Ricoland 買頭盔、Alpen 買運動裝備、Donki 買手信及 18+ 用品，同一日同一間店買滿 5,500 日圓（含稅）即可退稅，記得隨身帶備「實體護照正本」。"
+                        ]
+                    }
+                ]
+            },
+            {
+                id: "day1",
+                tabLabel: "Day 1 (11/20)",
+                tabSub: "運河城・大名夜遊",
+                fullTitle: "Day 1（11月20日 星期五）：落機、運河城掃貨與今泉大名夜遊",
+                summary: "抵達安頓後向博多方向掃排球裝備及絕版模型，傍晚殺入藥院食A5和牛，夜晚直落今泉大名射擊吧及立吞飲酒至午夜。",
+                items: [
+                    {
+                        id: "d1-1",
+                        time: "12:25 - 14:00",
+                        title: "抵達福岡機場 ➔ BASE LAYER HOTEL FUKUOKA",
+                        category: "交通",
+                        transport: "國際線免費接駁巴士 (5-8分一班，車程15分) ➔ 國內線客運大樓 B1 轉乘「地鐵空港線」(車程5分) 至博多站 ➔ 站內轉乘「地鐵七隈線」(車程3分) 至「渡邊通站」2號出口，步行4分鐘即達。",
+                        desc: "落機過關攞行李後極速前往酒店放低行李即刻出發。全程可用 Suica / ICOCA / Apple Pay 交通卡拍卡過閘。",
+                        mapQuery: "BASE LAYER HOTEL FUKUOKA",
+                        visited: false
+                    },
+                    {
+                        id: "d1-2",
+                        time: "14:05 - 16:00",
+                        title: "博多運河城 (Canal City)",
+                        category: "購物",
+                        transport: "由酒店沿那珂川河畔向北直接步行約 12 - 15 分鐘直達（風景開揚，唔使等車）。",
+                        desc: "直攻運河城內超大型運動旗艦店「Alpen FUKUOKA」，全男班掃齊排球及健身訓練裝備。",
+                        mapQuery: "Alpen FUKUOKA Canal City Hakata",
+                        visited: false
+                    },
+                    {
+                        id: "d1-3",
+                        time: "16:05 - 16:35",
+                        title: "櫛田神社",
+                        category: "景點",
+                        transport: "由運河城北側出口行天橋過去，步行僅 3 - 5 分鐘即達。",
+                        desc: "博多總鎮守打卡及參觀巨型裝飾山笠。⚠️ 注意：務必於 17:00 前離開免關門。",
+                        mapQuery: "櫛田神社 福岡",
+                        visited: false
+                    },
+                    {
+                        id: "d1-4",
+                        time: "16:45 - 18:00",
+                        title: "駿河屋 博多マルイ店 (KITTE 博多 6F)",
+                        category: "購物",
+                        transport: "行去「祇園站」前巴士站搭西鐵巴士 (2-3分一班，車程4分) 至「博多站前」落車（或直接步行12分鐘）。",
+                        desc: "全男班絕版動漫 Figure 及模型挖寶時間！",
+                        mapQuery: "駿河屋 博多マルイ店 KITTE博多",
+                        visited: false
+                    },
+                    {
+                        id: "d1-5",
+                        time: "18:00 - 20:30",
+                        title: "焼肉 肉いち 藥院店",
+                        category: "美食",
+                        transport: "落博多站搭「地鐵七隈線」(5-7分一班，車程5分) 至「藥院站」1號出口步行3分鐘。",
+                        desc: "🔥 提早 18:00 前去到門口撳飛等位（等位期間可去隔離便利店飲罐酒熱身），入座狂食高性價比 A4/A5 黑毛和牛！",
+                        mapQuery: "焼肉 肉いち 薬院店",
+                        visited: false
+                    },
+                    {
+                        id: "d1-6",
+                        time: "20:35 - 23:59",
+                        title: "今泉・大名區夜遊三連擊 ➔ 返酒店",
+                        category: "夜生活",
+                        transport: "全程步行！向北行 5 分鐘入今泉 ➔ 行 2 分鐘過隔離吧 ➔ 過馬路行 3 分鐘入大名 ➔ 12點沿渡邊通慢步 10 - 12 分鐘返酒店。",
+                        desc: "1️⃣ The Shooting Bar (今泉)：一邊飲酒一邊試射超像真氣槍長短火。\n2️⃣ ネオメグスタ今泉 / Stand Umineko yoca：超人氣企食立吞吧或精釀啤酒吧。\n3️⃣ The Highball stand 福岡天神店 (大名)：飲多轉威士忌梳打直落午夜 12 點！",
+                        mapQuery: "The Shooting Bar 今泉 福岡",
+                        visited: false
+                    }
+                ]
+            },
+            {
+                id: "day2",
+                tabLabel: "Day 2 (11/21)",
+                tabSub: "太宰府・百年藏",
+                fullTitle: "Day 2（11月21日 星期六）：太宰府紅葉、免費試酒與天神放電至午夜",
+                summary: "10:15出發賞秋季紅葉、下晝去酒造免費試飲鮮榨生酒、天神掃中古18+動漫，夜晚打室內排球飛鏢直落親不孝通。",
+                items: [
+                    {
+                        id: "d2-1",
+                        time: "10:15 - 13:15",
+                        title: "太宰府天滿宮",
+                        category: "景點",
+                        transport: "西行 8 分鐘至「西鐵藥院站」➔ 西鐵急行/特急 (15分) 至「二日市」轉太宰府線 (5分) 至太宰府站步行5分（週末朝早有直達「旅人號」）。",
+                        desc: "秋季賞紅葉、沿表參道食熱辣辣梅枝餅及明太子茶泡飯做午餐。",
+                        mapQuery: "太宰府天満宮",
+                        visited: false
+                    },
+                    {
+                        id: "d2-2",
+                        time: "13:15 - 15:00",
+                        title: "Ishikura Sake Brewery (博多百年藏)",
+                        category: "美食",
+                        transport: "西鐵返天神轉「地鐵空港線/箱崎線」(5分) 至「千代縣廳口站」4號出口步行5分鐘。",
+                        desc: "🍶 17:00 關門，免預約免費試飲招牌「鮮榨生酒」及梅酒！",
+                        mapQuery: "石蔵酒造 博多百年蔵",
+                        visited: false
+                    },
+                    {
+                        id: "d2-3",
+                        time: "15:10 - 18:15",
+                        title: "まんだらけ 福岡店 (Mandarake) ＆ 大名潮牌街",
+                        category: "購物",
+                        transport: "搭「地鐵箱崎線」(6分) 返「天神站」西1出口步行5分鐘。",
+                        desc: "中古動漫及 18+ 成人專區尋寶，順便行大名街頭潮牌波鞋店。",
+                        mapQuery: "まんだらけ 福岡店",
+                        visited: false
+                    },
+                    {
+                        id: "d2-4",
+                        time: "18:15 - 20:30",
+                        title: "餃子屋 弐ノ弐 (今泉店/大名店)",
+                        category: "美食",
+                        transport: "大名/今泉區內步行 4 - 6 分鐘。",
+                        desc: "Walk-in 排隊食平民脆皮煎餃配冰凍生啤。",
+                        mapQuery: "餃子屋 弐ノ弐 今泉店",
+                        visited: false
+                    },
+                    {
+                        id: "d2-5",
+                        time: "20:30 - 23:45",
+                        title: "Round One 福岡天神店 ➔ 親不孝通 ➔ 返酒店",
+                        category: "夜生活",
+                        transport: "北行 6 分鐘至 Round One ➔ 23:15 行 3 分鐘過親不孝通 ➔ ⚠️ 務必 23:55 前行 8 分鐘至「地鐵天神南站」搭七隈線尾班車 (約00:05-00:15) 返渡邊通站。",
+                        desc: "直上 Round One 頂樓玩 Spo-cha（室內排球 / 三對三籃球 / 掟飛鏢），臨返酒店前去親不孝通酒吧街飲多兩杯。",
+                        mapQuery: "ラウンドワン 福岡天神店",
+                        visited: false
+                    }
+                ]
+            },
+            {
+                id: "day3",
+                tabLabel: "Day 3 (11/22)",
+                tabSub: "糸島・中洲18+",
+                fullTitle: "Day 3（11月22日 星期日）：糸島絕景拼車與中洲夜王禁區",
+                summary: "全日跟拼車團輕鬆打卡糸島海景同食烤海鮮，夜晚返中洲食牛腸鍋、掃激安殿堂18+禁區及體驗中洲夜生活。",
+                items: [
+                    {
+                        id: "d3-1",
+                        time: "08:30 - 18:30",
+                        title: "糸島拼車一日遊",
+                        category: "景點",
+                        transport: "渡邊通站搭「地鐵七隈線」至博多 (3分) 或天神南 (2分) 集合點，全日專車接送。",
+                        desc: "輕鬆打卡白絲瀑布、櫻井二見浦夫妻岩、純白海上鳥居、龍貓之森及海邊烤海鮮（可在旅遊巴補眠）。",
+                        mapQuery: "桜井二見ヶ浦 夫婦岩 糸島",
+                        visited: false
+                    },
+                    {
+                        id: "d3-2",
+                        time: "18:45 - 20:30",
+                        title: "もつ鍋 楽天地 (中洲/天神分店)",
+                        category: "美食",
+                        transport: "天神解散步行 5 - 8 分鐘，或博多搭「地鐵空港線」(3分) 至「中洲川端站」步行3分鐘。",
+                        desc: "重口味韭菜蒜蓉肥美牛腸鍋配冰凍生啤。",
+                        mapQuery: "もつ鍋 楽天地 中洲本店",
+                        visited: false
+                    },
+                    {
+                        id: "d3-3",
+                        time: "20:30 - 23:59",
+                        title: "中洲不夜城三連擊 ➔ 返酒店",
+                        category: "夜生活",
+                        transport: "中洲區內全程步行！行 3 分鐘入 Donki 中洲店 ➔ 逛中洲川端紅燈區及屋台 ➔ 行 5 分鐘食 ShinShin ➔ 12點前搭七隈線或沿那珂川慢步15分返酒店。",
+                        desc: "1️⃣ Don Quijote 中洲店：直上高層 18+ 禁區研究成人玩具及買手信。\n2️⃣ 中洲川端紅燈區霓虹燈街、屋台及明碼實價 Girls Bar。\n3️⃣ 博多らーめん ShinShin：排隊食深夜豚骨拉麵宵夜！",
+                        mapQuery: "ドン・キホーテ 中洲店",
+                        visited: false
+                    }
+                ]
+            },
+            {
+                id: "day4",
+                tabLabel: "Day 4 (11/23)",
+                tabSub: "南藏院・長濱・E-ZO",
+                fullTitle: "Day 4（11月23日 星期一 公眾假期）：震撼大佛、漁民海鮮丼與 E・ZO",
+                summary: "朝早朝聖全球最大青銅臥佛，趕午市尾班車食長濱漁民海鮮丼，下晝去百道海濱玩高空滑翔機，夜晚博多爐端燒直落微醺街。",
+                items: [
+                    {
+                        id: "d4-1",
+                        time: "10:30 - 11:30",
+                        title: "南藏院 (Nanzoin)",
+                        category: "景點",
+                        transport: "渡邊通搭七隈線 (3分) 至博多站 ➔ 轉「JR 福北豐線/篠栗線」快速列車 (21分) 至「城戶南藏院前站」步行3分鐘。",
+                        desc: "參觀全球最大 41 米青銅臥佛配紅葉。⚠️ 嚴格控制 12:45 前上 JR 返博多，趕下一站午市！",
+                        mapQuery: "南蔵院 福岡",
+                        visited: false
+                    },
+                    {
+                        id: "d4-2",
+                        time: "12:45 - 13:45",
+                        title: "長濱鮮魚市場 (魚市場會館)",
+                        category: "美食",
+                        transport: "JR 返博多站 (22分) ➔ 站內轉「地鐵空港線」(8分，比巴士準時免假期塞車) 至「赤坂站」1號出口向海邊筆直行10分鐘。",
+                        desc: "⚠️ 務必 13:45 前到達趕 14:00 - 14:30 Last Order！直入 1 樓「おきよ食堂」或「博多魚がし」食超大份刺身丼。",
+                        mapQuery: "長浜鮮魚市場 市場会館",
+                        visited: false
+                    },
+                    {
+                        id: "d4-3",
+                        time: "14:30 - 17:30",
+                        title: "BOSS E・ZO FUKUOKA",
+                        category: "景點",
+                        transport: "行 3 分鐘出「法務局前 / 長濱二丁目」巴士站搭西鐵巴士 (300/301/303號，12-15分) 至「PayPayドーム前」。",
+                        desc: "連玩頂樓懸吊軌道滑翔機 (Tsubasa)、V-World VR 虛擬實境對戰及室內棒球打擊場。",
+                        mapQuery: "BOSS E・ZO FUKUOKA",
+                        visited: false
+                    },
+                    {
+                        id: "d4-4",
+                        time: "17:30 - 18:45",
+                        title: "百道海濱公園 ＆ 福岡塔",
+                        category: "景點",
+                        transport: "沿海濱步道向西步行 10 - 12 分鐘。",
+                        desc: "欣賞無敵海景日落與登上福岡塔頂樓睇全市夜景。",
+                        mapQuery: "福岡タワー",
+                        visited: false
+                    },
+                    {
+                        id: "d4-5",
+                        time: "19:00 - 23:59",
+                        title: "磯丸水產 博多站前店 ➔ 博多微醺街 ➔ 返酒店",
+                        category: "夜生活",
+                        transport: "福岡塔南口搭西鐵巴士 (306/312號經都市高速，22-25分) 返博多巴士總站步行3分 ➔ 12點前搭七隈線尾班車 (約00:05) 返渡邊通。",
+                        desc: "24 小時爐端燒海鮮狂飲生啤，食飽落博多站 B1「ほろよい通り (微醺街)」企食吧續攤！",
+                        mapQuery: "磯丸水産 博多駅前店",
+                        visited: false
+                    }
+                ]
+            },
+            {
+                id: "day5",
+                tabLabel: "Day 5 (11/24)",
+                tabSub: "高達・半道橋改車",
+                fullTitle: "Day 5（11月24日 星期二）：實物大高達、車迷終極補給與深夜食堂",
+                summary: "朝早朝聖1:1 ν高達同扭蛋海，下晝殺入半道橋掃二手改車件同頭盔，夜晚鑽入渡邊通昭和三角市場飲酒食重油拉麵。",
+                items: [
+                    {
+                        id: "d5-1",
+                        time: "11:00 - 14:00",
+                        title: "LaLaport 福岡",
+                        category: "購物",
+                        transport: "七隈線 (3分) 至博多 ➔ 轉「JR 鹿兒島本線」普通列車 1 個站 (3分) 至「竹下站」步行 9 - 10 分鐘。",
+                        desc: "打卡 1:1 實物大 ν 高達、逛 4 樓巨型扭蛋區及於 Food Court 享用午餐。",
+                        mapQuery: "ららぽーと福岡 実物大νガンダム立像",
+                        visited: false
+                    },
+                    {
+                        id: "d5-2",
+                        time: "14:15 - 17:30",
+                        title: "半道橋車迷天堂 (UP GARAGE RIDERS ＆ Ricoland 福岡空港店)",
+                        category: "購物",
+                        transport: "行返 JR 竹下站搭 1 站 (3分) 返博多 ➔ 博多站前 A 巴士站搭西鐵巴士 (41/43號，15-18分) 至「半道橋站」步行2分鐘。",
+                        desc: "🏍️ 搜尋二手改車補品零件、試戴全新 Arai/Shoei 頭盔、手套及睇保養油水（滿額可退稅）。",
+                        mapQuery: "ライコランド 福岡空港店",
+                        visited: false
+                    },
+                    {
+                        id: "d5-3",
+                        time: "17:45 - 21:30",
+                        title: "酒店放戰利品 ➔ 渡邊通三角市場",
+                        category: "夜生活",
+                        transport: "半道橋對面站搭西鐵巴士 41/43 號 (18分) 返博多 ➔ 七隈線 (3分) 返渡邊通放低頭盔補品 ➔ 酒店隔離行 3 分鐘即達。",
+                        desc: "鑽入極具昭和懷舊風情嘅「渡邊通三角市場」窄巷，隨心揀隱世企食居酒屋食串燒飲燒酎。",
+                        mapQuery: "渡辺通 三角市場 福岡",
+                        visited: false
+                    },
+                    {
+                        id: "d5-4",
+                        time: "21:30 - 23:59",
+                        title: "八ちゃんラーメン (藥院店) ➔ 返酒店",
+                        category: "美食",
+                        transport: "沿渡邊通向南步行 6 - 8 分鐘（食完行 8 分鐘返酒店執拾行李）。",
+                        desc: "🍜 本地男人飲完酒必食傳奇拉麵！湯底極重油濃郁豚骨（逢週三休息，週二晚去啱啱好）。",
+                        mapQuery: "八ちゃんラーメン 薬院店",
+                        visited: false
+                    }
+                ]
+            },
+            {
+                id: "day6",
+                tabLabel: "Day 6 (11/25)",
+                tabSub: "柳橋市場・回程",
+                fullTitle: "Day 6（11月25日 星期三）：街坊市場早餐與滿載回程",
+                summary: "退房寄存行李後行過對面柳橋市場食海鮮丼，再去博多站買明太子手信，12:15準時出發入機場搭14:45航班返港。",
+                items: [
+                    {
+                        id: "d6-1",
+                        time: "09:30 - 10:45",
+                        title: "退房寄存行李 ➔ 柳橋連合市場早餐",
+                        category: "美食",
+                        transport: "09:30 退房寄存行李於酒店前台 ➔ 步行 3 - 5 分鐘至斜對面市場食堂。",
+                        desc: "排隊食極鮮海鮮丼做完美早餐。",
+                        mapQuery: "柳橋連合市場",
+                        visited: false
+                    },
+                    {
+                        id: "d6-2",
+                        time: "10:45 - 12:15",
+                        title: "酒店攞行李 ➔ 博多站 (JR 博多城) 買手信",
+                        category: "購物",
+                        transport: "返酒店攞行李，渡邊通站搭「地鐵七隈線」(3分) 至博多站。",
+                        desc: "將行李鎖入車站儲物櫃，衝入「明太子街 (マイング)」掃明太子及九州士多啤梨。",
+                        mapQuery: "マイング 博多駅",
+                        visited: false
+                    },
+                    {
+                        id: "d6-3",
+                        time: "12:15 - 14:45",
+                        title: "博多站 ➔ 福岡機場 (FUK) 國際線",
+                        category: "交通",
+                        transport: "攞行李落 B1 搭「地鐵空港線」(5分) 至終點福岡空港站 ➔ 轉乘「免費國際線接駁巴士」(15分)。",
+                        desc: "✈️ 約 12:45 到達國際線客運大樓辦理登機及退稅，乘搭 14:45 航班滿載返港！",
+                        mapQuery: "福岡空港 国際線旅客ターミナル",
+                        visited: false
+                    }
+                ]
+            }
+        ];
+
+        // State Management
+        const STORAGE_KEY = 'fukuoka_bros_trip_2026_v2';
+        let itineraryData = [];
+        let activeTabId = 'overview';
+        let isEditMode = false;
+
+        // Category Styling Map
+        const CATEGORY_STYLES = {
+            '交通': 'bg-sky-500/15 text-sky-400 border-sky-500/30',
+            '美食': 'bg-orange-500/15 text-orange-400 border-orange-500/30',
+            '購物': 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+            '夜生活': 'bg-purple-500/15 text-purple-400 border-purple-500/30',
+            '景點': 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+        };
+
+        const CATEGORY_ICONS = {
+            '交通': '🚆',
+            '美食': '🍖',
+            '購物': '🛍️',
+            '夜生活': '🍻',
+            '景點': '⛩️'
+        };
+
+        // Initialize App
+        function init() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    itineraryData = JSON.parse(saved);
+                } else {
+                    itineraryData = JSON.parse(JSON.stringify(DEFAULT_ITINERARY));
+                }
+            } catch (e) {
+                console.error("Failed to load localStorage:", e);
+                itineraryData = JSON.parse(JSON.stringify(DEFAULT_ITINERARY));
+            }
+            renderTabs();
+            renderContent();
+        }
+
+        // Save to localStorage
+        function saveData(showNotification = true) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(itineraryData));
+                if (showNotification) {
+                    showToast("✅ 已自動儲存變更");
+                }
+            } catch (e) {
+                console.error("Save failed:", e);
+                showToast("⚠️ 儲存失敗，請檢查瀏覽器設定");
+            }
+        }
+
+        // Show Toast
+        function showToast(msg) {
+            const container = document.getElementById('toast-container');
+            const textEl = document.getElementById('toast-msg');
+            textEl.textContent = msg;
+            container.classList.remove('opacity-0');
+            container.classList.add('opacity-100');
+            clearTimeout(window.toastTimer);
+            window.toastTimer = setTimeout(() => {
+                container.classList.remove('opacity-100');
+                container.classList.add('opacity-0');
+            }, 2200);
+        }
+
+        // Toggle Edit Mode
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const btn = document.getElementById('btn-edit-mode');
+            const text = document.getElementById('edit-text');
+            const icon = document.getElementById('edit-icon');
+            const banner = document.getElementById('edit-banner');
+
+            if (isEditMode) {
+                btn.classList.remove('bg-slate-800', 'text-slate-200', 'border-slate-700');
+                btn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-500');
+                text.textContent = '完成編輯';
+                icon.textContent = '✅';
+                banner.classList.remove('hidden');
+            } else {
+                btn.classList.add('bg-slate-800', 'text-slate-200', 'border-slate-700');
+                btn.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-500');
+                text.textContent = '編輯模式';
+                icon.textContent = '✏️';
+                banner.classList.add('hidden');
+                saveData(true);
+            }
+            renderContent();
+        }
+
+        // Switch Day Tab
+        function selectTab(tabId) {
+            activeTabId = tabId;
+            renderTabs();
+            renderContent();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Render Horizontal Tabs
+        function renderTabs() {
+            const tabsContainer = document.getElementById('day-tabs');
+            tabsContainer.innerHTML = itineraryData.map(day => {
+                const isActive = day.id === activeTabId;
+                return `
+                    <button onclick="selectTab('${day.id}')" 
+                        class="shrink-0 px-3.5 py-2 rounded-xl text-left transition-all border ${
+                            isActive 
+                            ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-lg shadow-amber-500/20 font-extrabold' 
+                            : 'bg-slate-900/90 text-slate-300 border-slate-800 hover:bg-slate-800 hover:text-white font-semibold'
+                        }">
+                        <div class="text-xs sm:text-sm leading-tight">${day.tabLabel}</div>
+                        <div class="text-[10px] sm:text-xs mt-0.5 ${isActive ? 'text-slate-900/90 font-bold' : 'text-slate-400'}">${day.tabSub}</div>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // Render Main Content for Active Tab
+        function renderContent() {
+            const dayObj = itineraryData.find(d => d.id === activeTabId);
+            if (!dayObj) return;
+
+            const headerEl = document.getElementById('day-header');
+            const timelineEl = document.getElementById('timeline-container');
+            const addWrapper = document.getElementById('add-stop-wrapper');
+
+            // Render Day Header
+            headerEl.innerHTML = `
+                <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4">
+                    <h2 class="text-lg sm:text-xl font-black text-white leading-snug mb-1.5">${escapeHTML(dayObj.fullTitle)}</h2>
+                    ${dayObj.summary ? `<p class="text-xs sm:text-sm text-slate-400 leading-relaxed">${escapeHTML(dayObj.summary)}</p>` : ''}
+                </div>
+            `;
+
+            // If Tips Tab
+            if (dayObj.isTipsTab) {
+                addWrapper.classList.add('hidden');
+                timelineEl.innerHTML = dayObj.tipsSections.map(sec => `
+                    <div class="bg-[#131A2A] border border-slate-800 rounded-2xl p-5 shadow-md">
+                        <h3 class="text-base sm:text-lg font-extrabold text-amber-400 flex items-center gap-2 mb-3">
+                            <span class="text-xl">${sec.icon}</span>
+                            <span>${escapeHTML(sec.title)}</span>
+                        </h3>
+                        <ul class="space-y-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            ${sec.points.map(pt => `
+                                <li class="flex items-start gap-2.5">
+                                    <span class="text-amber-500 font-bold mt-0.5">•</span>
+                                    <span>${escapeHTML(pt)}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `).join('');
+                return;
+            }
+
+            // Render Itinerary Timeline Cards
+            if (isEditMode) {
+                addWrapper.classList.remove('hidden');
+            } else {
+                addWrapper.classList.add('hidden');
+            }
+
+            if (!dayObj.items || dayObj.items.length === 0) {
+                timelineEl.innerHTML = `
+                    <div class="text-center py-12 bg-slate-900/40 border border-dashed border-slate-800 rounded-2xl">
+                        <p class="text-slate-400 text-sm">呢日暫時未有行程，開啟「編輯模式」即可新增！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            timelineEl.innerHTML = dayObj.items.map((item, idx) => {
+                const catStyle = CATEGORY_STYLES[item.category] || CATEGORY_STYLES['景點'];
+                const catIcon = CATEGORY_ICONS[item.category] || '📍';
+                const mapQuery = encodeURIComponent((item.mapQuery || item.title) + ' 福岡');
+                const mapUrl = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
+
+                if (isEditMode) {
+                    // EDIT MODE CARD
+                    return `
+                        <div class="bg-[#131A2A] border-2 border-amber-500/40 rounded-2xl p-4 sm:p-5 shadow-xl relative">
+                            <div class="flex items-center justify-between gap-2 mb-3 pb-2.5 border-b border-slate-800">
+                                <span class="text-xs font-extrabold text-amber-400 uppercase tracking-wider">站點 #${idx + 1}</span>
+                                <div class="flex items-center gap-1.5">
+                                    <button onclick="moveItem(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-30 text-slate-200 text-xs font-bold" title="上移">⬆️</button>
+                                    <button onclick="moveItem(${idx}, 1)" ${idx === dayObj.items.length - 1 ? 'disabled' : ''} class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-30 text-slate-200 text-xs font-bold" title="下移">⬇️</button>
+                                    <button onclick="deleteItem(${idx})" class="p-1.5 rounded-lg bg-red-950/80 hover:bg-red-800 text-red-300 hover:text-white text-xs font-bold ml-1" title="刪除">🗑️ 刪除</button>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-400 mb-1">時間段</label>
+                                    <input type="text" value="${escapeAttr(item.time)}" oninput="updateItemField(${idx}, 'time', this.value)"
+                                        class="w-full bg-slate-950 border border-slate-700 focus:border-amber-500 rounded-xl px-3 py-2 text-xs sm:text-sm text-white font-semibold outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-400 mb-1">分類標籤</label>
+                                    <select onchange="updateItemField(${idx}, 'category', this.value)"
+                                        class="w-full bg-slate-950 border border-slate-700 focus:border-amber-500 rounded-xl px-3 py-2 text-xs sm:text-sm text-white font-semibold outline-none">
+                                        ${Object.keys(CATEGORY_STYLES).map(cat => `<option value="${cat}" ${item.category === cat ? 'selected' : ''}>${cat}</option>`).join('')}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-400 mb-1">Google Maps 關鍵字</label>
+                                    <input type="text" value="${escapeAttr(item.mapQuery || item.title)}" oninput="updateItemField(${idx}, 'mapQuery', this.value)"
+                                        class="w-full bg-slate-950 border border-slate-700 focus:border-amber-500 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-300 outline-none">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="block text-[11px] font-bold text-slate-400 mb-1">地點 / 活動名稱</label>
+                                <input type="text" value="${escapeAttr(item.title)}" oninput="updateItemField(${idx}, 'title', this.value)"
+                                    class="w-full bg-slate-950 border border-slate-700 focus:border-amber-500 rounded-xl px-3 py-2 text-sm sm:text-base text-white font-bold outline-none">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="block text-[11px] font-bold text-sky-400 mb-1">🚆 交通及路線指引</label>
+                                <textarea rows="2" oninput="updateItemField(${idx}, 'transport', this.value)"
+                                    class="w-full bg-slate-950 border border-slate-700 focus:border-sky-500 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-200 outline-none leading-relaxed">${escapeHTML(item.transport)}</textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-400 mb-1">📝 活動詳情 & 貼士</label>
+                                <textarea rows="3" oninput="updateItemField(${idx}, 'desc', this.value)"
+                                    class="w-full bg-slate-950 border border-slate-700 focus:border-amber-500 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-300 outline-none leading-relaxed">${escapeHTML(item.desc)}</textarea>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // VIEW MODE CARD
+                const isVisited = !!item.visited;
+                return `
+                    <article class="bg-[#131A2A] border ${isVisited ? 'border-emerald-500/40 opacity-75' : 'border-slate-800/90 hover:border-slate-700'} rounded-2xl p-4 sm:p-5 shadow-lg card-transition relative overflow-hidden">
+                        <!-- Top Row: Time Badge, Visited Toggle & Category Tag -->
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-amber-400 font-mono text-xs sm:text-sm font-extrabold tracking-tight">
+                                <span>🕒</span>
+                                <span>${escapeHTML(item.time)}</span>
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border text-xs font-bold ${catStyle}">
+                                    <span>${catIcon}</span>
+                                    <span>${escapeHTML(item.category)}</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Location / Activity Title -->
+                        <h3 class="text-lg sm:text-xl font-black ${isVisited ? 'line-through text-slate-400' : 'text-white'} leading-snug mb-3">
+                            ${escapeHTML(item.title)}
+                        </h3>
+
+                        <!-- Detailed Transport Instructions Box -->
+                        ${item.transport ? `
+                            <div class="bg-sky-950/35 border border-sky-800/40 rounded-xl p-3 mb-3.5">
+                                <div class="flex items-start gap-2">
+                                    <span class="text-base shrink-0 mt-0.5">🚆</span>
+                                    <div class="text-xs sm:text-sm text-sky-200/95 leading-relaxed font-medium">
+                                        <span class="font-extrabold text-sky-400 mr-1">交通：</span>${escapeHTML(item.transport)}
+                                    </div>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- Description & Pro-Tips -->
+                        ${item.desc ? `
+                            <div class="text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line mb-4">
+                                ${escapeHTML(item.desc)}
+                            </div>
+                        ` : ''}
+
+                        <!-- Footer Action: Visited Checkbox & Direct Google Maps Button -->
+                        <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                            <label class="inline-flex items-center gap-2 cursor-pointer select-none py-1 px-2 rounded-lg hover:bg-slate-800/70 transition">
+                                <input type="checkbox" ${isVisited ? 'checked' : ''} onchange="toggleVisited(${idx})"
+                                    class="w-4 h-4 rounded accent-emerald-500 cursor-pointer">
+                                <span class="text-xs font-bold ${isVisited ? 'text-emerald-400' : 'text-slate-400'}">
+                                    ${isVisited ? '✅ 已完成' : '標記為已完成'}
+                                </span>
+                            </label>
+                            <a href="${mapUrl}" target="_blank" rel="noopener noreferrer"
+                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-amber-500 text-slate-200 hover:text-slate-950 border border-slate-700 hover:border-amber-400 text-xs font-bold transition-all shadow-sm">
+                                <span>📍</span>
+                                <span>Google Maps 導航</span>
+                                <span>↗</span>
+                            </a>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        // Toggle Visited State
+        function toggleVisited(itemIndex) {
+            const dayObj = itineraryData.find(d => d.id === activeTabId);
+            if (!dayObj || !dayObj.items[itemIndex]) return;
+            dayObj.items[itemIndex].visited = !dayObj.items[itemIndex].visited;
+            saveData(false);
+            renderContent();
+        }
+
+        // Edit Mode Mutations
+        function updateItemField(itemIndex, field, value) {
+            const dayObj = itineraryData.find(d => d.id === activeTabId);
+            if (!dayObj || !dayObj.items[itemIndex]) return;
+            dayObj.items[itemIndex][field] = value;
+            saveData(false);
+        }
+
+        function moveItem(itemIndex, direction) {
+            const dayObj = itineraryData.find(d => d.id === activeTabId);
+            if (!dayObj) return;
+            const targetIndex = itemIndex + direction;
+            if (targetIndex < 0 || targetIndex >= dayObj.items.length) return;
+
+            const temp = dayObj.items[itemIndex];
+            dayObj.items[itemIndex] = dayObj.items[targetIndex];
+            dayObj.items[targetIndex] = temp;
+
+            saveData(true);
+            renderContent();
+        }
+
+        function deleteItem(itemIndex) {
+            const dayObj = itineraryData.find(d => d.id === activeTabId);
+            if (!dayObj) return;
+            dayObj.items.splice(itemIndex, 1);
+            saveData(true);
+            renderContent();
+        }
+
+        function addNewStop() {
+            const dayObj = itineraryData.find(d => d.id === activeTabId);
+            if (!dayObj || dayObj.isTipsTab) return;
+            dayObj.items.push({
+                id: 'custom-' + Date.now(),
+                time: "22:00 - 23:30",
+                title: "新增景點 / 宵夜站點",
+                category: "美食",
+                transport: "步行約 5 分鐘即達。",
+                desc: "輸入景點介紹、必食推介或注意事項...",
+                mapQuery: "福岡 天神",
+                visited: false
+            });
+            saveData(true);
+            renderContent();
+            setTimeout(() => {
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }, 100);
+        }
+
+        // Reset Confirmation Modal
+        function confirmReset() {
+            const modal = document.getElementById('confirm-modal');
+            document.getElementById('modal-title').textContent = '重設為預設行程？';
+            document.getElementById('modal-desc').textContent = '確定要清除你目前所作嘅所有修改，並還原返最初設定嘅「福岡全男班 6日5夜終極行程」嗎？';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            document.getElementById('modal-cancel').onclick = () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            };
+
+            document.getElementById('modal-confirm').onclick = () => {
+                localStorage.removeItem(STORAGE_KEY);
+                itineraryData = JSON.parse(JSON.stringify(DEFAULT_ITINERARY));
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                renderTabs();
+                renderContent();
+                showToast("🔄 已還原預設行程");
+            };
+        }
+
+        // Export Self-Contained Offline HTML with Current Edits Baked In
+        function exportHTML() {
+            try {
+                // Temporarily ensure we export in View Mode cleanly
+                const currentDataJSON = JSON.stringify(itineraryData, null, 4);
+                let docHtml = document.documentElement.outerHTML;
+
+                // Replace DEFAULT_ITINERARY definition in the exported file so friends see the edited version immediately
+                const startMarker = "const DEFAULT_ITINERARY = [";
+                const endMarker = "// State Management";
+                const startIdx = docHtml.indexOf(startMarker);
+                const endIdx = docHtml.indexOf(endMarker);
+
+                if (startIdx !== -1 && endIdx !== -1) {
+                    const before = docHtml.substring(0, startIdx);
+                    const after = docHtml.substring(endIdx);
+                    docHtml = before + `const DEFAULT_ITINERARY = ${currentDataJSON};\n\n        ` + after;
+                }
+
+                // Reset active UI states in exported HTML string (ensure toast/modal hidden & edit mode off)
+                const fullExport = "<!DOCTYPE html>\n" + docHtml;
+                const blob = new Blob([fullExport], { type: 'text/html;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'fukuoka_bros_trip_2026.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                showToast("📤 已匯出離線網頁！可直接Send畀團友");
+            } catch (e) {
+                console.error("Export error:", e);
+                showToast("⚠️ 匯出失敗，請重試");
+            }
+        }
+
+        // Security Helpers for HTML Escaping
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function escapeAttr(str) {
+            return escapeHTML(str);
+        }
+
+        // Start App
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
